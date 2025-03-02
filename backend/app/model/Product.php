@@ -1,17 +1,22 @@
 <?php
-
-use App\Config\Database;
+namespace App\Models;
 
 class Product {
-    private $db;
+    private int $id;
+    private string $name;
+    private float $price;
+    private string $image;
 
-    public function __construct() {
-        $database = new Database();
-        $this->db = $database->getConnection();
+    public function __construct(int $id, string $name, float $price, string $image) {
+        $this->id = $id;
+        $this->name = $name;
+        $this->price = $price;
+        $this->image = $image;
     }
 
-    public function getAllProducts() {
-        $stmt = $this->db->query("SELECT * FROM products");
-        return $stmt->fetchAll();
-    }
+    public function getId(): int { return $this->id; }
+    public function getName(): string { return $this->name; }
+    public function getPrice(): float { return $this->price; }
+    public function getImage(): string { return $this->image; }
+
 }
