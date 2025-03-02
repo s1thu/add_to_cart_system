@@ -1,26 +1,29 @@
 <?php
 namespace App\Repository;
 
-use App\Utils\Database; 
+use App\Utils\Database;
+use App\Models\Product;
 use PDO;
 
-class ProductRepository{
+class ProductRepository {
+    private PDO $db;
 
-    private $db;
-
-    public function __construct(){
+    public function __construct() {
         $this->db = Database::getConnection();
     }
 
-    public function getAllProducts(){
+    public function getAllProducts(): array {
         $stmt = $this->db->query("SELECT * FROM products");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return array_map(fn($row) => new Product($row['id'], $row['name'], $row['price'], $row['image']), $products);
     }
 
-    public function getProductById($id){
-        $stmt = $this->db->prepare("SELECT * FROM products WHERE id = :id");
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        return $stmt->fetch();
+    public function saveProduct(Product $product): void {
+        $stmt = $this->db->prepare("INSERT INTO products (name, price, image) VALUES (:name, :price, :image)");
+        $stmt->execute([
+            'name' => $product->getName(),
+            'price' => $product->getPrice(),
+            'image' => $product->getImage()
+        ]);
     }
 }
