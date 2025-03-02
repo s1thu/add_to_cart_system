@@ -9,8 +9,11 @@ class ProductController {
 
     private $productService;
 
+    public function __construct() {
+        $this->productService = new ProductService();
+    }
+
     public function getAllProducts() {
-        $productService = new ProductService();
         $products = $productService->getAllProducts();
         echo json_encode($products);
     }
