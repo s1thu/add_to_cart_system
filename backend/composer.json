@@ -1,0 +1,16 @@
+{
+  "name": "s1thu/add_to_cart",
+  "description": "A simple PHP add-to-cart system using MVC.",
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "authors": [
+    {
+      "name": "s1thu",
+      "email": "s1thu.w1n.5601@gmail.com"
+    }
+  ],
+  "require": {}
+}
