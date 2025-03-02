@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\DTOS\ProductDTO;
+use App\Models\DTOs\ProductDTO;
 use App\Services\ProductService;
 use App\Mappers\ProductMapper;
 
@@ -12,28 +12,31 @@ class ProductController {
         $this->productService = new ProductService();
     }
 
+    // ✅ Get all products
     public function getAllProducts() {
         $products = $this->productService->getAllProducts();
         $productDTOs = array_map(fn($product) => ProductMapper::toDTO($product), $products);
-        error_log(print_r($productDTOs, true));
+
+        header('Content-Type: application/json');
         echo json_encode($productDTOs);
     }
 
+    // ✅ Create a new product
     public function createProduct() {
         $data = json_decode(file_get_contents("php://input"), true);
 
+        // Validate input
         if (!isset($data['name']) || !isset($data['price']) || !isset($data['image'])) {
             http_response_code(400);
             echo json_encode(["error" => "Invalid input"]);
             return;
         }
 
+        // Create DTO and pass it to service
         $productDTO = new ProductDTO(0, $data['name'], (float) $data['price'], $data['image']);
-        $product = ProductMapper::toEntity($productDTO);
-        
-        $this->productService->saveProduct($product);
+        $savedProductDTO = $this->productService->saveProduct($productDTO);
 
         http_response_code(201);
-        echo json_encode(["message" => "Product created successfully"]);
+        echo json_encode(["message" => "Product created successfully", "product" => $savedProductDTO]);
     }
 }

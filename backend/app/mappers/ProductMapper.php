@@ -16,10 +16,10 @@ class ProductMapper {
 
     public static function toEntity(ProductDTO $dto): Product {
         return new Product(
-            $dto->id,
-            $dto->name,
-            $dto->price,
-            $dto->image
+            $dto->getId(),
+            $dto->getName(),
+            $dto->getPrice(),
+            $dto->getImage()
         );
     }
 }

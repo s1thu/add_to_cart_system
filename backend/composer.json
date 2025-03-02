@@ -12,5 +12,7 @@
       "email": "s1thu.w1n.5601@gmail.com"
     }
   ],
-  "require": {}
+  "require": {
+    "altorouter/altorouter": "^2.0"
+  }
 }
