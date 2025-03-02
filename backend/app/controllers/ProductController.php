@@ -14,7 +14,7 @@ class ProductController {
     }
 
     public function getAllProducts() {
-        $products = $productService->getAllProducts();
+        $products = $this->productService->getAllProducts();
         echo json_encode($products);
     }
 }

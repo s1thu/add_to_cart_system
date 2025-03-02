@@ -2,19 +2,19 @@
 namespace App\Repository;
 
 use App\Utils\Database; 
+use PDO;
 
 class ProductRepository{
 
     private $db;
 
     public function __construct(){
-        $database = new Database();
-        $this->db = $database->getConnection();
+        $this->db = Database::getConnection();
     }
 
     public function getAllProducts(){
         $stmt = $this->db->query("SELECT * FROM products");
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getProductById($id){
