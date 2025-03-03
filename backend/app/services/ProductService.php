@@ -14,7 +14,8 @@ class ProductService {
 
     // ✅ Get all products (Returns Entity List)
     public function getAllProducts(): array {
-        return $this->productRepository->getAllProducts();
+        $products = $this->productRepository->getAllProducts();
+        return array_map(fn($product) => ProductMapper::toDTO($product), $products);
     }
 
     // ✅ Save a product (Uses DTO and Converts it)

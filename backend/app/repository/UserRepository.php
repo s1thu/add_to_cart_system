@@ -28,11 +28,35 @@ class UserRepository {
     }
 
     // ✅ Get user by ID
-    public function getUserById(int $id): ?array {
-        $stmt = $this->db->prepare("SELECT id, name, email FROM users WHERE id = :id");
+    public function getUserById(int $id): ?User {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
         $stmt->execute([':id' => $id]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $user ?: null;
+        return $user ? new User(
+            $user['id'],
+            $user['name'],
+            $user['email'],
+            $user['password']
+        ) : null;
+    }
+
+    // ✅ Fetch user by email
+    public function getUserByEmail(string $email): ?User {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute([':email' => $email]);
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            return null;
+        }
+
+        return new User(
+            $user['id'],
+            $user['name'],
+            $user['email'],
+            $user['password']
+        );
     }
 
     // ✅ Create a new user
@@ -44,21 +68,5 @@ class UserRepository {
             ':password' => password_hash($user->getPassword(), PASSWORD_BCRYPT)
         ]);
         return $this->db->lastInsertId();
-    }
-
-    // ✅ Update user details
-    public function updateUser(User $user): bool {
-        $stmt = $this->db->prepare("UPDATE users SET name = :name, email = :email WHERE id = :id");
-        return $stmt->execute([
-            ':name' => $user->getUsername(),
-            ':email' => $user->getEmail(),
-            ':id' => $user->getId()
-        ]);
-    }
-
-    // ✅ Delete a user by ID
-    public function deleteUser(int $id): bool {
-        $stmt = $this->db->prepare("DELETE FROM users WHERE id = :id");
-        return $stmt->execute([':id' => $id]);
     }
 }

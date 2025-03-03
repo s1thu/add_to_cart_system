@@ -15,7 +15,6 @@ class UserService {
     // ✅ Get all users
     public function getAllUsers(): array {
         $users = $this->userRepository->getAllUsers();
-        error_log(print_r($users, true));
         return array_map(fn($user) => UserMapper::toDTO($user), $users);
     }
 
@@ -34,14 +33,8 @@ class UserService {
         return $this->userRepository->createUser($userEntity);
     }
 
-    // ✅ Update user
-    public function updateUser(UserDTO $userDTO): bool {
-        $userEntity = UserMapper::toEntity($userDTO);
-        return $this->userRepository->updateUser($userEntity);
-    }
-
-    // ✅ Delete user
-    public function deleteUser(int $id): bool {
-        return $this->userRepository->deleteUser($id);
+    public function getUserByEmail(string $email): ?UserDTO {
+        $user = $this->userRepository->getUserByEmail($email);
+        return $user ? UserMapper::toDTO($user) : null;
     }
 }
