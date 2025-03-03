@@ -15,10 +15,8 @@ class ProductController {
     // ✅ Get all products
     public function getAllProducts() {
         $products = $this->productService->getAllProducts();
-        $productDTOs = array_map(fn($product) => ProductMapper::toDTO($product), $products);
-
         header('Content-Type: application/json');
-        echo json_encode($productDTOs);
+        echo json_encode($products);
     }
 
     // ✅ Create a new product

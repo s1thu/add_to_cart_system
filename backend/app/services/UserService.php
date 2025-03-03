@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Repository\UserRepository;
 use App\Models\DTOs\UserDTO;
 use App\Mappers\UserMapper;
+use App\Models\DTOs\LoginRequestDTO;
 
 class UserService {
     private UserRepository $userRepository;
@@ -36,5 +37,14 @@ class UserService {
     public function getUserByEmail(string $email): ?UserDTO {
         $user = $this->userRepository->getUserByEmail($email);
         return $user ? UserMapper::toDTO($user) : null;
+    }
+
+    public function login(LoginRequestDTO $dto): ?UserDTO {
+        $user = $this->userRepository->getUserByEmail($dto->getEmail());
+        if (!$user || !password_verify($dto->getPassword(), $user->getPassword())) {
+            return null; // Invalid login
+        }
+        // Convert to DTO
+        return new UserDTO($user->getId(), $user->getUsername(), $user->getEmail());
     }
 }

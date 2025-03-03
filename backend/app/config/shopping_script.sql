@@ -25,5 +25,6 @@ CREATE TABLE cart (
     quantity INT DEFAULT 1,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    UNIQUE (user_id, product_id) -- ✅ Prevents duplicate cart entries
 );

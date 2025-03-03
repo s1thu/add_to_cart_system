@@ -21,6 +21,17 @@ $router->map('GET', '/api/users/[i:id]', [UserController::class, 'getUserById'])
 $router->map('POST', '/api/users', [UserController::class, 'createUser']);
 $router->map('GET', '/api/users/[*:email]', [UserController::class, 'getUserByEmail']);
 
+//Login
+$router->map('POST', '/api/users/login', [UserController::class, 'login']);
+
+/**
+ * Cart Routes
+ */
+$router->map('GET', '/api/cart/[i:user_id]', [CartController::class, 'getCart']);
+$router->map('POST', '/api/cart/add', [CartController::class, 'addToCart']);
+$router->map('POST', '/api/cart/update', [CartController::class, 'updateCart']);
+$router->map('POST', '/api/cart/remove', [CartController::class, 'removeFromCart']);
+$router->map('POST', '/api/cart/clear', [CartController::class, 'clearCart']);
 /**
  * Handle Route Matching
  */
